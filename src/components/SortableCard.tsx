@@ -1,10 +1,17 @@
+import React from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import type { ReactNode } from 'react';
+import type { DraggableAttributes } from '@dnd-kit/core';
+
 
 interface SortableCardProps {
   id: string;
   children: ReactNode;
+}
+interface SortableCardChildProps {
+  dragListeners?: Record<string, unknown>;
+  dragAttributes?: DraggableAttributes;
 }
 
 export function SortableCard({ id, children }: SortableCardProps) {
@@ -28,11 +35,16 @@ export function SortableCard({ id, children }: SortableCardProps) {
     <div 
       ref={setNodeRef} 
       style={style} 
-      className="card"
-      {...listeners}     
-      {...attributes}     
+      className="card"   
     >
-      {children}
+      {React.Children.map(children, child => {
+        if (React.isValidElement<SortableCardChildProps>(child)) {
+          return React.cloneElement(child, {
+            dragListeners: listeners,
+          });
+        }
+        return child;
+      })}
     </div>
   );
 }

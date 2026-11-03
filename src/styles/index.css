@@ -1,3 +1,8 @@
+@font-face {
+  font-family: Xmind;
+  src: url(../../public\fonts\Xmind-VariableFont_wght.ttf);
+}
+
 :root {
   --text: #6b6375;
   --text-h: #08060d;
@@ -15,7 +20,7 @@
   --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
   --mono: ui-monospace, Consolas, monospace;
 
-  font: 18px/145% var(--sans);
+  font: 18px/145% Xmind;
   letter-spacing: 0.18px;
   color-scheme: light dark;
   color: var(--text);
@@ -65,7 +70,7 @@ body {
 
 h1,
 h2 {
-  font-family: var(--heading);
+  font-family: Xmind;
   font-weight: 500;
   color: var(--text-h);
 }
@@ -106,6 +111,16 @@ code {
   line-height: 135%;
   padding: 4px 8px;
   background: var(--code-bg);
+}
+textarea{
+   font: 18px/145% Xmind;
+  letter-spacing: 0.18px;
+  border:none;
+  background:none;
+  width: 100%;
+  height: 100%;
+  resize: none;
+
 }
 button {
   width: 2rem;

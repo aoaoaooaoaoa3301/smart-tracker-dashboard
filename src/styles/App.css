@@ -66,11 +66,7 @@
   gap: 25px;
   
   flex-grow: 1;
-  &:last-child{
-    grid-column: 1 / -1; /* растянуть на всю ширину */
-    align-items: center;
-    margin-top: 20px;
-  }
+  
   
   .btn-add-new-card{
     margin: 0 auto;
@@ -85,6 +81,11 @@
   
 }
 
+.flex-center{
+  display: flex;
+  justify-content: center;
+  align-items:center;
+}
 
 
 #header {

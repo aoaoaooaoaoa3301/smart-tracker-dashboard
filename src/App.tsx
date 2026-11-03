@@ -25,6 +25,7 @@ interface BaseCard {
   id: string;
   title: string;
   type: CardType;
+  size: number[];
 }
 
 interface ZametkiCard extends BaseCard {
@@ -41,16 +42,16 @@ interface ListCard extends BaseCard {
 type Card = ZametkiCard | ListCard;
 
 
-const cardsIn: Card[] = [
-  { id: '1', type: 'zametki', title: "Заметка 1", content: 'Lorem ipsum dolor sit amet asd asdadasnd oasndo asnd oasndo ansdoasn odians iodnasod nasod nakod nasod nasod ians' },
-  { id: '2', type: 'zametki', title: "Заметка 2", content: 'Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet asd asdadasnd oasndo asnd oasndo ansdoasn odians iodnasod nasod nakod nasod nasod ians' },
-  { id: '3', type: 'zametki', title: "Заметка 3", content: 'Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet asd asdadasnd oasndo asnd oasndo ansdoasn odians iodnasod nasod nakod nasod nasod ians' },
-  { id: '4', type: 'list', title: "Список 1", content: ['123', '321', '1234', '3124142'] },
-  { id: '5', type: 'zametki', title: "Заметка 5", content: 'Lorem ipsum dolor sit ametLorem ipsum dolor sit amet asd asdadasnd oasndo asnd oasndo ansdoasn odians iodnasod nasod nakod nasod nasod ians.' },
-  { id: '6', type: 'zametki', title: "Заметка 6", content: 'Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet asd asdadasnd oasndo asnd oasndo ansdoasn odians iodnasod nasod nakod nasod nasod ians' },
-  { id: '7', type: 'zametki', title: "Заметка 7", content: 'Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet asd asdadasnd oasndo asnd oasndo ansdoasn odians iodnasod nasod nakod nasod nasod ians.' },
-  { id: '8', type: 'zametki', title: "Заметка 8", content: 'Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet asd asdadasnd oasndo asnd oasndo ansdoasn odians iodnasod nasod nakod nasod nasod ians.' },
-  { id: '9', type: 'zametki', title: "Заметка 9", content: 'Lorem ipsum dolor sit amet...' },
+const cardsEx: Card[] = [
+  { id: '1', type: 'zametki', size:[500,500], title: "Заметка 1", content: 'Lorem ipsum dolor sit amet asd asdadasnd oasndo asnd oasndo ansdoasn odians iodnasod nasod nakod nasod nasod ians' },
+  { id: '2', type: 'zametki', size:[200,200], title: "Заметка 2", content: 'Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet asd asdadasnd oasndo asnd oasndo ansdoasn odians iodnasod nasod nakod nasod nasod ians' },
+  { id: '3', type: 'zametki', size:[200,200], title: "Заметка 3", content: 'Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet asd asdadasnd oasndo asnd oasndo ansdoasn odians iodnasod nasod nakod nasod nasod ians' },
+  { id: '4', type: 'list', size:[200,200], title: "Список 1", content: ['123', '321', '1234', '3124142'] },
+  { id: '5', type: 'zametki', size:[200,200], title: "Заметка 5", content: 'Lorem ipsum dolor sit ametLorem ipsum dolor sit amet asd asdadasnd oasndo asnd oasndo ansdoasn odians iodnasod nasod nakod nasod nasod ians.' },
+  { id: '6', type: 'zametki', size:[800,400], title: "Заметка 6", content: 'Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet asd asdadasnd oasndo asnd oasndo ansdoasn odians iodnasod nasod nakod nasod nasod ians' },
+  { id: '7', type: 'zametki', size:[200,200], title: "Заметка 7", content: 'Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet asd asdadasnd oasndo asnd oasndo ansdoasn odians iodnasod nasod nakod nasod nasod ians.' },
+  { id: '8', type: 'zametki', size:[200,200], title: "Заметка 8", content: 'Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet asd asdadasnd oasndo asnd oasndo ansdoasn odians iodnasod nasod nakod nasod nasod ians.' },
+  { id: '9', type: 'zametki', size:[500,400], title: "Заметка 9", content: 'Lorem ipsum dolor sit amet...' },
   
 ];
 
@@ -62,6 +63,7 @@ function renderCardContent(item: Card): React.ReactNode {
           id={item.id}
           title={item.title} 
           content={item.content} 
+          size={[item.size[0],item.size[1]]}
         />
       );
     case 'list':
@@ -69,7 +71,8 @@ function renderCardContent(item: Card): React.ReactNode {
         <List
           id={item.id}
           title={item.title} 
-          content={item.content} 
+          content={item.content}
+          size={[item.size[0],item.size[1]]}
         />
       );
     default:
@@ -77,8 +80,24 @@ function renderCardContent(item: Card): React.ReactNode {
   }
 }
 
+
+
 function App() {
-  const [cards, setCards] = useState<Card[]>(cardsIn);
+
+  const [cards, setCards] = useState<Card[]>(cardsEx);
+  
+
+  const AddNewCard = () =>{ 
+    const newCard: Card = {
+    id: `${cards.length + 1}`,  // ✅ уникальный ID
+    type: 'list',
+    size: [200, 200],
+    title: "Новый список",
+    content: ['123', '321', '1234', '3124142'],
+    };
+    console.log([...cards, newCard]);
+    setCards((cardsIn) => [...cardsIn, newCard]);
+  }
 
   // Сенсоры: мышь + клавиатура
   const sensors = useSensors(
@@ -109,6 +128,7 @@ function App() {
     }
   };
 
+
   return (
     <>
       <section id="header">
@@ -129,8 +149,10 @@ function App() {
               {renderCardContent(item)}
             </SortableCard>
           ))}
-          
-          <button className='btn-add-new-card'>+</button>
+          <div style={{width:`${cards[cards.length-1].size[0]}px`,height:`${cards[cards.length-1].size[1]}px`}} className='flex-center'>
+
+          <button onClick={AddNewCard} className='btn-add-new-card'>+</button>
+          </div>
           
           </SortableContext>
       </DndContext>
