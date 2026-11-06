@@ -1,29 +1,41 @@
 
 .zametki, .list {
-    min-width: 7rem;
-    min-height: 4rem;
+  display: flex;
+  min-width: 7rem;
+  min-height: 7rem;
+  overflow: hidden;
+  resize: both;
     
-    border: 1px solid var(--border);
-    border-radius: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 1rem;
 }
 .zametki{
-    position: relative;
-    .btn-text-edit{
-        position: absolute;
-        bottom: -1rem;
-    }
-    
-    p{
-        padding: 1rem;
-        text-align: left;
-    }
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  .btn-text-edit{
+    position: absolute;
+    bottom: -1rem;
+  }
+  textarea{
+    max-height: 100%; 
+    box-sizing: border-box; 
+    padding: 0 0.5rem 0.5rem 0.5rem;
+    flex-grow: 1;
+  }
+}
+.list{
+  display: flex;
+  flex-direction: column;
+}
+.drag-handle {
+  max-height: 4rem;
+  cursor: grab;
+  padding: 10px 15px;
+  background-color: var(--accent-bg); /* Цвет шапки */
+  user-select: none; /* Запрещаем выделение текста при перетаскивании */
+  transition: background-color 0.2s ease;
 }
 
 
-.list {
-    ul{
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-    }
-}
+

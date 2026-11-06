@@ -16,7 +16,6 @@ interface SortableCardChildProps {
 
 export function SortableCard({ id, children }: SortableCardProps) {
   const {
-    attributes,
     listeners,
     setNodeRef,
     transform,

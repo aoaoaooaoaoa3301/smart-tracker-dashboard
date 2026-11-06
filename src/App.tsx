@@ -2,7 +2,6 @@ import { useState } from 'react';
 import {
   DndContext,
   closestCenter,
-  KeyboardSensor,
   PointerSensor,
   useSensor,
   useSensors,
@@ -11,7 +10,6 @@ import type { DragEndEvent } from '@dnd-kit/core';
 import {
   arrayMove,
   SortableContext,
-  sortableKeyboardCoordinates,
   rectSortingStrategy,
 } from '@dnd-kit/sortable';
 import './styles/App.css'
@@ -25,7 +23,7 @@ interface BaseCard {
   id: string;
   title: string;
   type: CardType;
-  size: number[];
+  size: [number,number];
 }
 
 interface ZametkiCard extends BaseCard {
@@ -89,7 +87,7 @@ function App() {
 
   const AddNewCard = () =>{ 
     const newCard: Card = {
-    id: `${cards.length + 1}`,  // ✅ уникальный ID
+    id: crypto.randomUUID(),  // ✅ уникальный ID
     type: 'list',
     size: [200, 200],
     title: "Новый список",
@@ -105,9 +103,6 @@ function App() {
       activationConstraint: {
         distance: 5, // перетаскивание начнётся только после движения на 5px
       },
-    }),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
     })
   );
 
@@ -128,6 +123,7 @@ function App() {
     }
   };
 
+  const lastCardSize = cards[cards.length - 1]?.size || null;
 
   return (
     <>
@@ -142,20 +138,21 @@ function App() {
         collisionDetection={closestCenter}
         onDragEnd={handleDragEnd}
         >
-        <SortableContext items={cards.map((c) => c.id)} strategy={rectSortingStrategy}>
-          
+        <SortableContext items={cards.map((c) => c.id)} strategy={rectSortingStrategy}>         
           {cards.map((item) => (
             <SortableCard key={item.id} id={item.id}>
               {renderCardContent(item)}
             </SortableCard>
           ))}
-          <div style={{width:`${cards[cards.length-1].size[0]}px`,height:`${cards[cards.length-1].size[1]}px`}} className='flex-center'>
 
-          <button onClick={AddNewCard} className='btn-add-new-card'>+</button>
-          </div>
+
+          
           
           </SortableContext>
       </DndContext>
+      <div style={{width:`${lastCardSize[0]}px`,height:`${lastCardSize[1]}px`}} className='flex-center'>
+            <button onClick={AddNewCard} className='btn-add-new-card'>+</button>
+          </div>
       </section>
         
 
